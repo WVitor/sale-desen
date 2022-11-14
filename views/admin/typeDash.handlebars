@@ -1,0 +1,83 @@
+<div class="dashboard">
+    <div class="home-header">
+        {{#if search}}
+        <h1>Resultado da busca: <span>{{search}}</span></h1>  
+        {{#if typesQty}}
+                <p>Resultados: <span>{{typesQty}}</span></p>
+        {{else}}
+                <p>Nenhum Resultado para o termo: <span>{{search}}</span></p>
+        {{/if}}
+        {{else}}
+            <h1><span>Tipos</span>:</h1>
+        {{/if}}
+        
+        <form action="/tipos-usuario" method="get">
+            <input type="text" name="search" placeholder="Pesquisar">
+            <input type="submit" class="btn" value="Buscar">
+        </form>
+        <div class="order-container">
+            <span>Ordenar por:</span>
+            <!--mais novo ao mais velho-->
+            <form action="/tipos-usuario" method="get">
+                <input type="hidden" name="search" value="{{this.search}}">
+                <input type="hidden" name="order" value="desc">
+                <button type="submit"><i class="bi bi-arrow-up"></i></button>
+            </form>
+            <!--mais velho ao mais novo-->
+            <form action="/tipos-usuario" method="get">
+                <input type="hidden" name="search" value="{{this.search}}">
+                <input type="hidden" name="order" value="asc">
+                <button type="submit"><i class="bi bi-arrow-down"></i></button>
+            </form>
+            <a href="/tipos-usuario">Limpar</a>
+        </div>
+    </div> 
+    <div class="title-container">
+        <h2>Tipos de usuários cadastrados</h2>
+        <div>
+            <a href="cadastrar-tipo" class="btn">Cadastrar</a>
+        </div>
+
+    </div>
+    <div class="tabela-produtos">
+        <table >
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Level</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each tipos}}
+                <tr>
+                    <td><span class="label">{{this.nome}}</span></td>
+                    <td><span class="label">{{this.nivel}}</span></td>
+                    <td>
+                        <span class="actions">
+                            <a href="/permissoes/{{this.nome}}" class="btn">permissões</a>
+                            <form action="/remover-tipo" method="post">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <input type="submit" value="Excluir" class="btn">
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pagination"> 
+        {{#if paginacao}}  
+        <a href="/tipos-usuario/{{paginationLeft}}">&laquo;</a>
+        {{#each paginacao}}            
+        <a href="/tipos-usuario/{{this}}">{{this}}</a>
+        {{/each}}
+        <a href="/tipos-usuario/{{paginationRight}}">&raquo;</a>
+        {{/if}}
+    </div>
+    {{#if emptyProdutos}}
+        <p>Não Existe tipos de usuarios, <a href="cadastrar-tipo">click aqui</a> para cadastrar.</p>
+    {{/if}}
+</div>

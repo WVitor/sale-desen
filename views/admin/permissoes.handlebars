@@ -1,0 +1,22 @@
+<div class="auth-container">
+    <h2>permissões</h2>
+    <form action="/permissoes" method="POST">
+        <input type="hidden" name="id" value="{{typeId}}"/>
+        {{#each tipoFuncionalidades}}
+            <div class="form-control-for-checkbox">            
+                <input type="checkbox" name={{this.nome}} value={{this.id}} checked>
+                <label for={{this.nome}}>{{this.nome}}</label>   
+            </div>
+        {{/each}}
+        {{#each funcionalidades}}
+            <div class="form-control-for-checkbox">            
+                <input type="checkbox" name={{this.nome}} value={{this.id}}>
+                <label for={{this.nome}}>{{this.nome}}</label>   
+            </div>
+        {{/each}}
+        <div class="btn-control">
+            <a href="/tipos-usuario">Voltar</a>
+            <input type="submit" value="Registrar"> 
+        </div>
+    </form>
+</div>

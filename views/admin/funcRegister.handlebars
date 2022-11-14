@@ -1,0 +1,24 @@
+<div class="auth-container">
+    <h2>Registrar</h2>
+    <form action="/cadastrar-funcionalidade" method="POST">
+        <div class="form-control">
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" placeholder="Digite o nome da funcionalidade." required/>
+        </div>
+        <div class="form-control">
+            <label for="url">Url:</label>
+            <input type="text" name="url" placeholder="Digite a url." required/>
+        </div>
+        <div class="form-control">
+            <label for="nivel">Nivel:</label>
+            <select name="nivel" required>
+                    <option value='1'>1</option>  
+                    <option value='2'>2</option>                  
+            </select>
+        </div>
+        <div class="btn-control">
+            <a href="/funcionalidades">Voltar</a>
+            <input type="submit" value="Registrar"> 
+        </div>
+    </form>
+</div>

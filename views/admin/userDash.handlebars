@@ -1,0 +1,85 @@
+<div class="dashboard">
+ <div class="home-header">
+    {{#if search}}
+      <h1>Resultado da busca: <span>{{search}}</span></h1>  
+      {{#if usersQty}}
+            <p>Resultados: <span>{{usersQty}}</span></p>
+      {{else}}
+            <p>Nenhum Resultado para o termo: <span>{{search}}</span></p>
+      {{/if}}
+    {{else}}
+        <h1><span>Usuários</span>:</h1>
+    {{/if}}
+    
+    <form action="/usuarios" method="get">
+        <input type="text" name="search" placeholder="Pesquisar">
+        <input type="submit" class="btn" value="Buscar">
+    </form>
+    <div class="order-container">
+        <span>Ordenar por:</span>
+        <!--mais novo ao mais velho-->
+        <form action="/usuarios" method="get">
+            <input type="hidden" name="search" value="{{this.search}}">
+            <input type="hidden" name="order" value="desc">
+            <button type="submit"><i class="bi bi-arrow-up"></i></button>
+        </form>
+        <!--mais velho ao mais novo-->
+        <form action="/usuarios" method="get">
+            <input type="hidden" name="search" value="{{this.search}}">
+            <input type="hidden" name="order" value="asc">
+            <button type="submit"><i class="bi bi-arrow-down"></i></button>
+        </form>
+        <a href="/usuarios">Limpar</a>
+    </div> 
+</div> 
+    <div class="title-container">
+        <h2>Usuários cadastrados</h2>
+        <div>
+            <a href="/cadastrar-usuario" class="btn">Cadastrar</a>
+        </div>
+    </div>
+    <div class="tabela-produtos">
+        <table >
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Tipo</th>
+                    <th>Data de criação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each usuarios}}
+                <tr>
+                    <td><span class="label">{{this.nome}}</span></td>
+                    <td><span class="label">{{this.email}}</span></td>
+                    <td><span class="label">{{this.tipo.nome}}</span></td>
+                    <td><span class="label">{{this.created_at}}</span></td>
+                    <td>
+                        <span class="actions">
+                            <form action="/remover-usuario" method="post">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <input type="submit" value="Excluir" class="btn">
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pagination"> 
+        {{#if paginacao}}  
+        <a href="/usuarios/{{paginationLeft}}">&laquo;</a>
+        {{#each paginacao}}            
+        <a href="/usuarios/{{this}}">{{this}}</a>
+        {{/each}}
+        <a href="/usuarios/{{paginationRight}}">&raquo;</a>
+        {{/if}}
+    </div>
+    {{#if emptyUsers}}
+        <p>Não Existe usuarios, <a href="/cadastrar-usuario">click aqui</a> para cadastrar.</p>
+    {{/if}}
+</div>

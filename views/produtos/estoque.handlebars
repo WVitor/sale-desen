@@ -1,0 +1,93 @@
+<div class="dashboard">
+    <div class="home-header">
+        {{#if search}}
+        <h1>Resultado da busca: <span>{{search}}</span></h1>  
+        {{#if produtosQty}}
+                <p>Resultados: <span>{{produtosQty}}</span></p>
+        {{else}}
+                <p>Nenhum Resultado para o termo: <span>{{search}}</span></p>
+        {{/if}}
+        {{else}}
+            <h1><span>Estoque</span>:</h1>
+        {{/if}}
+        
+        <form action="/estoque" method="get">
+            <input type="text" name="search" placeholder="Pesquisar">
+            <input type="submit" class="btn" value="Buscar">
+        </form>
+        <div class="order-container">
+            <span>Ordenar por:</span>
+            <!--mais novo ao mais velho-->
+            <form action="/estoque" method="get">
+                <input type="hidden" name="search" value="{{this.search}}">
+                <input type="hidden" name="order" value="desc">
+                <button type="submit"><i class="bi bi-arrow-up"></i></button>
+            </form>
+            <!--mais velho ao mais novo-->
+            <form action="/estoque" method="get">
+                <input type="hidden" name="search" value="{{this.search}}">
+                <input type="hidden" name="order" value="asc">
+                <button type="submit"><i class="bi bi-arrow-down"></i></button>
+            </form>
+            <a href="/estoque">Limpar</a>
+        </div>
+    </div> 
+    <div class="title-container">
+        <h2>Estoques cadastrados</h2>
+        <div>
+            <a href="/cadastrar-produto" class="btn">Cadastrar</a>
+            <a href="/arquivos/planilha" class="btn">Planilha</a>
+        </div>
+
+    </div>
+    <div class="tabela-produtos">
+        <table >
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each produtos}}
+                <tr>
+                    <td><span class="label">{{this.codigo}}</span></td>
+                    <td><span class="label">{{this.nome}}</span></td>
+                    <td><span class="label">{{this.descricao}}</span></td>
+                    <td><span class="label">{{this.quantidade}}</span></td>
+                    <td>
+                        <span class="actions">
+                            <a href="/editar-produto/{{this.id}}" class="btn">Editar</a>
+                            <form action="/baixa-produto" method="post">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <input type="hidden" name="codigo" value="{{this.codigo}}">
+                                <input type="submit" value="Baixa" class="btn">
+                            </form>
+                            <form action="/remover-produto" method="post">
+                                <input type="hidden" name="id" value="{{this.id}}">
+                                <input type="submit" value="Excluir" class="btn">
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="pagination"> 
+        {{#if paginacao}}  
+        <a href="/estoque/{{paginationLeft}}">&laquo;</a>
+        {{#each paginacao}}            
+        <a href="/estoque/{{this}}">{{this}}</a>
+        {{/each}}
+        <a href="/estoque/{{paginationRight}}">&raquo;</a>
+        {{/if}}
+    </div>
+    {{#if emptyProdutos}}
+        <p>Não Existe estoque, <a href="/cadastrar-produto">click aqui</a> para cadastrar.</p>
+    {{/if}}
+</div>

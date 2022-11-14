@@ -1,0 +1,30 @@
+<div class="auth-container">
+    <h2>Registrar</h2>
+    <form action="/cadastrar-usuario" method="POST">
+        <div class="form-control">
+            <label for="nome">Nome:</label>
+            <input type="text" name="nome" placeholder="Digite o nome." required/>
+        </div>
+        <div class="form-control">
+            <label for="email">E-mail:</label>
+            <input type="text" name="email" placeholder="Digite o E-mail." required/>
+        </div>
+        <div class="form-control">
+            <label for="tipo">Escolha o tipo:</label>
+            <select name="tipo" required>
+                {{#if tipos}}
+                {{#each tipos}}
+                    <option value={{this.id}}>{{this.nome}}</option>
+                {{/each}}
+                {{else}}
+                    <option value=null>sem tipos disponíveis</option>
+                {{/if}}
+            </select>
+        </div>   
+        <div class="btn-control">
+            <a href="/usuarios">Voltar</a>
+            <input type="submit" value="Registrar"> 
+        </div>
+
+    </form>
+</div>

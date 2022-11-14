@@ -1,0 +1,15 @@
+<div class="auth-container">
+    <h2>Redefinir a senha</h2>
+    <form action="/redefinir-senha?token={{token}}" method="POST"> 
+        <div class="form-control">
+            <label for="pwd">Senha:</label>
+            <input type="password" name="pwd" placeholder="Digite sua senha." required/>
+        </div>       
+        <div class="form-control">
+            <label for="confirmpwd">Confirme sua Senha:</label>
+            <input type="password" name="confirmpwd" placeholder="Confirme sua senha." required/>
+        </div> 
+        <input type="hidden" name="token">
+        <input type="submit" value="Redefinir"> 
+    </form>
+</div>
