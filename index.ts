@@ -45,7 +45,7 @@ app.use(ExpressSession({
     }),
     cookie: {
         secure: false,
-        maxAge: 1800000,
+        maxAge: 1800000, //30 minutos em milesegundos
         httpOnly: true,
     },
 }))
@@ -69,7 +69,6 @@ app.use(produtosRoutes)
 app.use((req, res)=>{
     res.redirect(`/dashboard`)
 })
-
 
 AppDataSource.initialize().then(async () => {
     http.listen(process.env.PORT, async ()=>{

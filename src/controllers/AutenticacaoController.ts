@@ -42,7 +42,7 @@ export class AutenticacaoController{
                 req.session["levelMaster"] = true
             }
 
-            const token = jwt.sign({userId: usuario.id}, process.env.SECRET, { expiresIn: 120})
+            const token = jwt.sign({userId: usuario.id}, process.env.SECRET, { expiresIn: 1800 /*30 minutos em segundos*/})
             req.session["userId"] = usuario.id
             req.session["token"] = token
  
@@ -86,7 +86,7 @@ export class AutenticacaoController{
     
             //configuracoes de envio de email
             let context = ``
-            if(req.hostname == 'localhost'){
+            if(req.hostname == 'localhost' || req.hostname == '127.0.0.1' || req.hostname == 'sesco32'){
                 context = `http://${req.hostname}:3000/redefinir-senha?token=${token}`
             }else{
                 context = `https://${req.hostname}/redefinir-senha?token=${token}`

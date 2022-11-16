@@ -6,7 +6,7 @@ import { http } from '../../index'
 
 const WebSocket = require('ws')
 
-const wss = new WebSocket.Server({server: http, port: 3001, path:"/ws"});
+const wss = new WebSocket.Server({server: http, port: 3001});
 
 
 export class SocketsController{

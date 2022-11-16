@@ -17,5 +17,6 @@ produtosRoutes.post('/editar-produto', checkAuth, funcionalidadesValidacao, Prod
 
 produtosRoutes.post('/baixa-produto', checkAuth, funcionalidadesValidacao, ProdutosController.baixaProduto)
 produtosRoutes.post('/remover-produto', checkAuth, funcionalidadesValidacao, ProdutosController.removerProduto)
+
 produtosRoutes.get('/arquivos/planilha', checkAuth, funcionalidadesValidacao, ProdutosController.exportarPlanilha)
- 
+produtosRoutes.get('/arquivos/relatorio', checkAuth, funcionalidadesValidacao, ProdutosController.exportarPlanilha)
