@@ -6,6 +6,9 @@ import moment = require('moment');
 import otc = require('objects-to-csv')
 import fs = require('fs')
 import path = require('path')
+import PdfPrinter = require("pdfmake");
+import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
+import { table } from "console";
 
 export class ProdutosController{
 
@@ -59,7 +62,7 @@ export class ProdutosController{
                 produtosQty = false
             }
             
-            return res.render('produtos/estoque', {produtos, emptyProdutos, search, produtosQty, paginacao, paginationLeft, paginationRight})
+            return res.render('produtos/estoque', {Data: moment().format("DD-MM-YYYY"), produtos, emptyProdutos, search, produtosQty, paginacao, paginationLeft, paginationRight})
         } catch (error) {
             console.log(error)
         }
@@ -131,6 +134,7 @@ export class ProdutosController{
             console.log(error)
         }
     }
+
     static async editarProdutoPost(req, res){
         try {
             const {id, nome, descricao, quantidade} = req.body
@@ -159,6 +163,69 @@ export class ProdutosController{
             await csv.toDisk(`${tmpDir}/Planilha-${moment().format("DD-MM-YYYY")}.csv`)
             res.download(`${tmpDir}/Planilha-${moment().format("DD-MM-YYYY")}.csv`)
             fs.rm(`${tmpDir}/Planilha-${moment().format("DD-MM-YYYY")}.csv`, (err)=>{if(err){console.log(err)}})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    static async exportarRelatorio(req, res){
+        try {
+            const produtos = await ProdutoRepository.planilhaData()
+            let valoresEntrada = []
+            if(produtos.length !== 0){
+                valoresEntrada = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                produtos.map(produto=>{ 
+                    valoresEntrada.push(Object.values(produto).map(v => v))
+                })
+            }
+
+            //const baixas = await ProdutoRepository.planilhaData() 
+
+            const fonts = {
+                Helvetica: {
+                  normal: 'Helvetica',
+                  bold: 'Helvetica-Bold',
+                  italics: 'Helvetica-Oblique',
+                  bolditalics: 'Helvetica-BoldOblique'
+                }
+              };
+    
+            const docDefinitions : TDocumentDefinitions = {
+                defaultStyle: {font: 'Helvetica'},
+                content: [
+                    produtos.length !== 0 ? 
+                    {      
+                        table:{
+                            body: [...valoresEntrada]
+                        } 
+                    }:
+                    {
+                        text: "Não existe produtos cadastrados no respectivo mes"
+                    }
+                ],
+                styles: {
+                    columnsTitle: {
+                        fontSize: 13,
+                        bold: true,
+                        fillColor: "#222",
+                        color: "#f6982d",
+                        alignment: "center",
+                        margin: 4
+                    }
+                }
+            }
+
+            const pdfDoc = new PdfPrinter(fonts).createPdfKitDocument(docDefinitions)
+            const chunks = []
+            pdfDoc.on('data', (chunk)=>{
+                chunks.push(chunk)
+            })
+            pdfDoc.end()
+            pdfDoc.on('end', ()=>{
+                const relatorio = Buffer.concat(chunks)
+                res.end(relatorio)
+            })
+
         } catch (error) {
             console.log(error)
         }
