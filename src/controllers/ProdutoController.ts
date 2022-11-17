@@ -170,15 +170,35 @@ export class ProdutosController{
 
     static async exportarRelatorio(req, res){
         try {
-            const produtos = await ProdutoRepository.planilhaData()
-            let valoresEntrada = []
-            if(produtos.length !== 0){
-                valoresEntrada = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
-                produtos.map(produto=>{ 
-                    valoresEntrada.push(Object.values(produto).map(v => v))
-                })
+            let entradasMesAtual = []
+            let entradasMesPassado = []
+            let entradasMesRetrasado = []
+            for (var i = 0; i<= 2; i++){
+                const produtos = await ProdutoRepository.estoquePorMes(i)   
+                if(produtos.length !== 0){
+                    if(i == 0){
+                        entradasMesAtual = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        produtos.map(produto=>{ 
+                            entradasMesAtual.push(Object.values(produto).map(v => v))
+                        })
+                    }
+                    else if(i == 1){
+                        entradasMesPassado = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        produtos.map(produto=>{ 
+                            entradasMesPassado.push(Object.values(produto).map(v => v))
+                        })
+                    }
+                    else if(i == 2){
+                        entradasMesRetrasado = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        produtos.map(produto=>{ 
+                            entradasMesRetrasado.push(Object.values(produto).map(v => v))
+                        })
+                    }
+                }
             }
-
+            console.log(entradasMesAtual)
+            console.log(entradasMesPassado)
+            console.log(entradasMesRetrasado)
             //const baixas = await ProdutoRepository.planilhaData() 
 
             const fonts = {
@@ -193,10 +213,10 @@ export class ProdutosController{
             const docDefinitions : TDocumentDefinitions = {
                 defaultStyle: {font: 'Helvetica'},
                 content: [
-                    produtos.length !== 0 ? 
+                    entradasMesAtual.length !== 0 ? 
                     {      
                         table:{
-                            body: [...valoresEntrada]
+                            body: [...entradasMesAtual]
                         } 
                     }:
                     {
