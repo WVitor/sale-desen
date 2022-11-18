@@ -14,7 +14,7 @@ export const ProdutoRepository = AppDataSource.getRepository(Produto).extend({
         return ProdutoRepository.createQueryBuilder("produto")
             .where("produto.created_at >= :dataInicio", { dataInicio: moment().subtract(i, 'months').format("YYYY-MM-01 00:00:00") })
             .andWhere("produto.created_at <= :dataFinal", { dataFinal: moment().subtract(i, 'months').format("YYYY-MM-DD 23:59:59") })
-            .select(["produto.codigo", "produto.nome", "produto.descricao", "produto.quantidade", "produto.created_at"])
+            .select(["produto.codigo", "produto.nome", "produto.descricao", "produto.quantidade"])
             .getMany() 
     },
 })

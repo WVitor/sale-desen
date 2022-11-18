@@ -2,13 +2,12 @@ import { Like } from "typeorm"
 import { SocketsController } from "../modules/webSocket"
 import { BaixaRepository } from "../repositories/BaixaRepository"
 import { ProdutoRepository } from "../repositories/ProdutoRepository"
-import moment = require('moment');
+const moment = require('moment');
 import otc = require('objects-to-csv')
 import fs = require('fs')
 import path = require('path')
 import PdfPrinter = require("pdfmake");
 import { TableCell, TDocumentDefinitions } from "pdfmake/interfaces";
-import { table } from "console";
 
 export class ProdutosController{
 
@@ -173,32 +172,74 @@ export class ProdutosController{
             let entradasMesAtual = []
             let entradasMesPassado = []
             let entradasMesRetrasado = []
+            let baixasMesAtual = []
+            let baixasMesPassado = []
+            let baixasMesRestrasado = []
+            const months = moment.localeData("pt").months()
+            let meses = []
             for (var i = 0; i<= 2; i++){
                 const produtos = await ProdutoRepository.estoquePorMes(i)   
-                if(produtos.length !== 0){
-                    if(i == 0){
+                const baixas = await BaixaRepository.estoquePorMes(i)
+                meses.push(months[moment().subtract(i, 'months').format("MM") - 1].toUpperCase())
+                if(i == 0){
+                    //entradas
+                    if(produtos.length !== 0){
                         entradasMesAtual = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
                         produtos.map(produto=>{ 
                             entradasMesAtual.push(Object.values(produto).map(v => v))
                         })
+                    }else{
+                        entradasMesAtual = [[{text: "Não existe estoque referente a esse mes.", style: "columnsTitle"}]]
                     }
-                    else if(i == 1){
+                    //baixas
+                    if(baixas.length !== 0){
+                        baixasMesAtual = [Object.keys(baixas[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        baixas.map(baixa=>{ 
+                            baixasMesAtual.push(Object.values(baixa).map(v => v))
+                        })
+                    }else{
+                        baixasMesAtual = [[{text: "Não existe baixas referente a esse mes.", style: "columnsTitle"}]]
+                    }
+                }
+                else if(i == 1){
+                    if(produtos.length !== 0){
                         entradasMesPassado = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
                         produtos.map(produto=>{ 
                             entradasMesPassado.push(Object.values(produto).map(v => v))
                         })
+                    }else{
+                        entradasMesPassado = [[{text: "Não existe estoque referente a esse mes.", style: "columnsTitle"}]]
                     }
-                    else if(i == 2){
+                    //baixas
+                    if(baixas.length !== 0){
+                        baixasMesPassado = [Object.keys(baixas[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        baixas.map(baixa=>{ 
+                            baixasMesPassado.push(Object.values(baixa).map(v => v))
+                        })
+                    }else{
+                        baixasMesPassado = [[{text: "Não existe baixas referente a esse mes.", style: "columnsTitle"}]]
+                    }
+                }
+                else if(i == 2){
+                    if(produtos.length !== 0){
                         entradasMesRetrasado = [Object.keys(produtos[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
                         produtos.map(produto=>{ 
                             entradasMesRetrasado.push(Object.values(produto).map(v => v))
                         })
+                    }else{
+                        entradasMesRetrasado = [[{text: "Não existe estoque referente a esse mes.", style: "columnsTitle"}]]
+                    }
+                    //baixas
+                    if(baixas.length !== 0){
+                        baixasMesRestrasado = [Object.keys(baixas[0]).map(k=>{return{text:k, style: "columnsTitle"}})]
+                        baixas.map(baixa=>{ 
+                            baixasMesRestrasado.push(Object.values(baixa).map(v => v))
+                        })
+                    }else{
+                        baixasMesRestrasado = [[{text: "Não existe baixas referente a esse mes.", style: "columnsTitle"}]]
                     }
                 }
             }
-            console.log(entradasMesAtual)
-            console.log(entradasMesPassado)
-            console.log(entradasMesRetrasado)
             //const baixas = await ProdutoRepository.planilhaData() 
 
             const fonts = {
@@ -208,19 +249,57 @@ export class ProdutosController{
                   italics: 'Helvetica-Oblique',
                   bolditalics: 'Helvetica-BoldOblique'
                 }
-              };
-    
+            };
             const docDefinitions : TDocumentDefinitions = {
                 defaultStyle: {font: 'Helvetica'},
                 content: [
-                    entradasMesAtual.length !== 0 ? 
-                    {      
+                    {
+                        text: `Relação de produtos referente ao mes ${meses[0]}`
+                    },                   
+                    {    
                         table:{
                             body: [...entradasMesAtual]
                         } 
-                    }:
+                    },
                     {
-                        text: "Não existe produtos cadastrados no respectivo mes"
+                        text: `Relação de produtos referente ao mes ${meses[1]}`
+                    },
+                    {
+                        table:{
+                            body: [...entradasMesPassado]
+                        }
+                    },
+                    {
+                        text: `Relação de produtos referente ao mes ${meses[2]}`
+                    },
+                    {
+                        table: {
+                            body: [...entradasMesRetrasado]
+                        }
+                    },
+                    {
+                        text: `Relação de Baixas referente ao mes ${meses[2]}`
+                    },
+                    {
+                        table: {
+                            body: [...baixasMesAtual]
+                        }
+                    },
+                    {
+                        text: `Relação de Baixas referente ao mes ${meses[2]}`
+                    },
+                    {
+                        table: {
+                            body: [...baixasMesPassado]
+                        }
+                    },
+                    {
+                        text: `Relação de Baixas referente ao mes ${meses[2]}`
+                    },
+                    {
+                        table: {
+                            body: [...baixasMesRestrasado]
+                        }
                     }
                 ],
                 styles: {
