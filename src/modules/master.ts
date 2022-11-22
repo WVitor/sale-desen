@@ -1,6 +1,3 @@
-import { Funcionalidade } from '../entity/Funcionalidade'
-import { TipoUsuario } from '../entity/Tipo_Usuario'
-import { Usuario } from '../entity/Usuario'
 import { FuncionalidadeRepository } from '../repositories/FuncionalidadeRepository'
 import { TipoUsuarioRepository } from '../repositories/TipoUsuarioRepository'
 import { UsuarioRepository } from '../repositories/UsuarioRepository'
