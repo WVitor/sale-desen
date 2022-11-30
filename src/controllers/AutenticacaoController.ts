@@ -166,7 +166,7 @@ export class AutenticacaoController{
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if(err) { return res.status(400).json({error: 'token expirado'}) }
         })
-        console.log(token)
+        
         return res.status(200).json({message: 'token validado'})
     }
 }
