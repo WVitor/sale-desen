@@ -10,8 +10,8 @@
             <input type="text" name="email" placeholder="Digite o E-mail." required/>
         </div>
         <div class="form-control">
-            <label for="tipo">Escolha o tipo:</label>
-            <select name="tipo" required>
+            <label for="tipoId">Escolha o tipo:</label>
+            <select name="tipoId" required>
                 {{#if tipos}}
                 {{#each tipos}}
                     <option value={{this.id}}>{{this.nome}}</option>
