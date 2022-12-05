@@ -18,7 +18,7 @@ import EventEmitter = require("events")
 export class SocketsController{
     static async graficoDashboard(){
         wss.on('connection', async function connection(ws) {
-            console.log('A new client Connected!');
+            console.log(`Cliente conectado!`);
           
             const months = moment.monthsShort()
             let labels = []
@@ -53,9 +53,9 @@ export class SocketsController{
             baixas = baixas.map((baixa)=>baixa)
 
             ws.send(JSON.stringify({labels, entradas, baixas}))
-            return ws.on('disconnect', () => {
-                console.log(`Client disconnected ${ws.id}`);
-            })
+            ws.on('close', function close() {
+                console.log('Cliente desconectado');
+            });
         });
         return
     }
