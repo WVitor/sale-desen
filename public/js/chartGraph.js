@@ -1,6 +1,4 @@
 function construirChart(){ 
-
-    //const socket = new WebSocket("ws://localhost:3000/websocket");
     const socket = new WebSocket('ws://localhost:3001/ws');
     // Connection opened
     socket.onmessage = event => {
@@ -9,8 +7,7 @@ function construirChart(){
         const entradas = data.entradas
         const baixas = data.baixas
 
-        const ctx = document.getElementById('myChart');
-        const myChart = new Chart(ctx, {      
+        const myChart = new Chart(document.getElementById('myChart'), {      
             data: {
                 labels: labels,
                 datasets: [{
@@ -57,15 +54,6 @@ function construirChart(){
             }
         });
       }
-
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-
-    });
-
- 
-
-   
 } 
 
 construirChart()

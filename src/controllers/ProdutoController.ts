@@ -15,6 +15,7 @@ export class ProdutosController{
     static async dashboard(req, res){
         try {
             SocketsController.graficoDashboard()
+            //SocketsController.graficoDashboardd()
             res.render('produtos/home')
         } catch (error) {
             console.log(error)
