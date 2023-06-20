@@ -1,14 +1,14 @@
 require('dotenv').config()
-import { AppDataSource } from "./src/dao/data-source"
+import { AppDataSource } from "./dao/data-source"
 import Express = require('express')
-import { produtosRoutes } from "./src/routes/produtosRoutes"
+import { produtosRoutes } from "./routes/produtosRoutes"
 const app = Express()
 import cors = require('cors')
 import * as ExpressSession from "express-session";
-import { autenticacaoRoutes } from "./src/routes/autenticacaoRoutes"
-import { usuarioRoutes } from "./src/routes/usuarioRoutes"
-import { funcionalidadesRoutes } from "./src/routes/funcionalidadesRoutes"
-import { tipoUsuarioRoutes } from "./src/routes/tipoUsuarioRoutes"
+import { autenticacaoRoutes } from "./routes/autenticacaoRoutes"
+import { usuarioRoutes } from "./routes/usuarioRoutes"
+import { funcionalidadesRoutes } from "./routes/funcionalidadesRoutes"
+import { tipoUsuarioRoutes } from "./routes/tipoUsuarioRoutes"
 export type SessionRequest = Express.Request & {
     session: [{
             token: string,
@@ -19,7 +19,7 @@ export type SessionRequest = Express.Request & {
     ];
   };
 const fileStore = require('session-file-store')(ExpressSession)
-const Master = require('./src/modules/master')
+const Master = require('./modules/master')
 const exphbs = require('express-handlebars')
 const flash = require('express-flash')
 export const http = require('http').createServer(app)
@@ -27,9 +27,9 @@ export const http = require('http').createServer(app)
 app.use(Express.urlencoded({extended: true}))
 app.use(Express.json())
 app.use(cors({credentials:true, origin:'*'}))
-app.use(Express.static(`${__dirname}/public`))
-app.use('*/css', Express.static(`${__dirname}/public/css`))
-app.use('*/js', Express.static(`${__dirname}/public/js`))
+app.use(Express.static(`${__dirname}/../public`))
+app.use('*/css', Express.static(`${__dirname}/../public/css`))
+app.use('*/js', Express.static(`${__dirname}/../public/js`))
 app.use(flash())
 app.engine('handlebars', exphbs.engine())
 app.set('view engine', 'handlebars')

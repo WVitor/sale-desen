@@ -5,3 +5,4 @@ tmp/
 temp/
 sale/
 .env
+package-lock.json

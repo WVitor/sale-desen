@@ -2,7 +2,7 @@ import { Between } from "typeorm"
 import { BaixaRepository } from "../repositories/BaixaRepository"
 import { ProdutoRepository } from "../repositories/ProdutoRepository"
 const moment = require('moment')
-import { http } from '../../index'
+import { http } from '../index'
 
 //ws
 const WebSocket = require('ws')
